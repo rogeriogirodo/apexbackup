@@ -115,3 +115,23 @@ sqlplus $OOS_AB_ORACLE_USERNAME/$OOS_AB_ORACLE_PASSWORD@$OOS_AB_ORACLE_HOST:$OOS
 
 # Back to start location
 cd $OOS_AB_START_DIR
+
+
+#sendmail
+FILE=$OOS_AB_BACKUP_DIR/$OOS_AB_REPORT_FILENAME
+SUBJECT="Backup Apex `hostname` - `date`"
+
+if [[ -n "$EMAIL_TO" ]]
+then
+
+(
+  echo To: $EMAIL_TO
+  echo From: $EMAIL_FROM
+  echo "Content-Type: text/html; charset=UTF-8"
+  echo Subject: $SUBJECT
+  echo
+  cat $FILE
+  echo "<p>Backup localizado em: <b>$OOS_AB_BACKUP_DIR</b></p>"
+) | sendmail -t
+
+fi
